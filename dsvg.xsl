@@ -94,6 +94,9 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
+            <xsl:when test="name() = 'pathseg'">
+              <xsl:value-of select="@d"/>
+            </xsl:when>
             <xsl:when test="name() = 'closepath'">
               <xsl:value-of select="'z'"/>
             </xsl:when>

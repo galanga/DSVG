@@ -73,6 +73,9 @@ xsl:stylesheet(xmlns:xsl='http://www.w3.org/1999/XSL/Transform', version='1.0')
                       xsl:value-of(select='"M"')/
                       xsl:value-of(select='@d')/
 
+            xsl:when(test="name() = 'pathseg'")
+              xsl:value-of(select='@d')/
+
             xsl:when(test="name() = 'closepath'")
               xsl:value-of(select="'z'")/
 

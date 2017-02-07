@@ -96,3 +96,38 @@ assert_svgpath ()
    assert_svgpath "z"
 }
 
+@test "pathseg concatenate d attributes" {
+IN=$(cat <<'EOF'
+<svg>
+<path>
+    <pathseg d="M100,200" />
+    <pathseg d="C100,100 250,100 250,200" />
+    <pathseg d="S400,300 400,200" />
+</path>
+</svg>
+EOF
+)
+   test_svgpath "$IN"
+   assert_svgpath "M100,200C100,100 250,100 250,200S400,300 400,200"
+}
+
+@test "example orthagonal path" {
+IN=$(cat <<'EOF'
+<svg>
+<path>
+<moveto x="50" y="375" />
+<lineto x="150" />
+<lineto y="325" />
+<lineto x="250" />
+<lineto y="375" />
+<lineto x="350" />
+<lineto y="250" />
+</path>
+</svg>
+EOF
+)
+   test_svgpath "$IN"
+   assert_svgpath "M50,375H150V325H250V375H350V250"
+}
+
+
