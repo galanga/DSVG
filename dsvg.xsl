@@ -27,7 +27,17 @@
               <xsl:value-of select="@d"/>
             </xsl:when>
             <xsl:when test="name() = 'lineto'">
-              <xsl:value-of select="'L'"/>
+              <xsl:choose>
+                <xsl:when test="@type='relative'">
+                  <xsl:value-of select="'l'"/>
+                </xsl:when>
+                <xsl:when test="@type='rel'">
+                  <xsl:value-of select="'l'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="'L'"/>
+                </xsl:otherwise>
+              </xsl:choose>
               <xsl:value-of select="@d"/>
             </xsl:when>
             <xsl:when test="name() = 'moveto-rel'">

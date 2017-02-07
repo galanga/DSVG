@@ -21,7 +21,13 @@ xsl:stylesheet(xmlns:xsl='http://www.w3.org/1999/XSL/Transform', version='1.0')
               xsl:value-of(select='@d')/
 
             xsl:when(test="name() = 'lineto'")
-              xsl:value-of(select="'L'")/
+              xsl:choose
+                xsl:when(test="@type='relative'")
+                  xsl:value-of(select="'l'")/
+                xsl:when(test="@type='rel'")
+                  xsl:value-of(select="'l'")/
+                xsl:otherwise
+                  xsl:value-of(select="'L'")/
               xsl:value-of(select='@d')/
 
             xsl:when(test="name() = 'moveto-rel'")
