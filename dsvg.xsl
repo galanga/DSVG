@@ -12,41 +12,87 @@
         <xsl:value-of select="@d"/>
         <xsl:for-each select="./*">
           <xsl:choose>
-            <xsl:when test="name() = 'moveto'">
-              <xsl:choose>
-                <xsl:when test="@type='relative'">
-                  <xsl:value-of select="'m'"/>
-                </xsl:when>
-                <xsl:when test="@type='rel'">
-                  <xsl:value-of select="'m'"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="'M'"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="@d"/>
-            </xsl:when>
             <xsl:when test="name() = 'lineto'">
               <xsl:choose>
-                <xsl:when test="@type='relative'">
-                  <xsl:value-of select="'l'"/>
+                <xsl:when test="@type='relative' or @type='rel'">
+                  <xsl:choose>
+                    <xsl:when test="@y and not(@x)">
+                      <xsl:value-of select="&quot;v&quot;"/>
+                      <xsl:value-of select="@y"/>
+                    </xsl:when>
+                    <xsl:when test="@x and not(@y)">
+                      <xsl:value-of select="&quot;h&quot;"/>
+                      <xsl:value-of select="@x"/>
+                    </xsl:when>
+                    <xsl:when test="@x and @y">
+                      <xsl:value-of select="&quot;l&quot;"/>
+                      <xsl:value-of select="@x"/>
+                      <xsl:value-of select="&quot;,&quot;"/>
+                      <xsl:value-of select="@y"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="&quot;l&quot;"/>
+                      <xsl:value-of select="@d"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:when>
-                <xsl:when test="@type='rel'">
-                  <xsl:value-of select="'l'"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="'L'"/>
+                <!-- default to absolute positioning if relative not specified-->
+                <xsl:otherwise> 
+                  <xsl:choose>
+                    <xsl:when test="@y and not(@x)">
+                      <xsl:value-of select="&quot;V&quot;"/>
+                      <xsl:value-of select="@y"/>
+                    </xsl:when>
+                    <xsl:when test="@x and not(@y)">
+                      <xsl:value-of select="&quot;H&quot;"/>
+                      <xsl:value-of select="@x"/>
+                    </xsl:when>
+                    <xsl:when test="@x and @y">
+                      <xsl:value-of select="&quot;L&quot;"/>
+                      <xsl:value-of select="@x"/>
+                      <xsl:value-of select="&quot;,&quot;"/>
+                      <xsl:value-of select="@y"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="&quot;L&quot;"/>
+                      <xsl:value-of select="@d"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:otherwise>
               </xsl:choose>
-              <xsl:value-of select="@d"/>
             </xsl:when>
-            <xsl:when test="name() = 'moveto-rel'">
-              <xsl:value-of select="'m'"/>
-              <xsl:value-of select="@d"/>
-            </xsl:when>
-            <xsl:when test="name() = 'lineto-rel'">
-              <xsl:value-of select="'l'"/>
-              <xsl:value-of select="@d"/>
+            <xsl:when test="name() = 'moveto'">
+              <xsl:choose>
+                <xsl:when test="@type='relative' or @type='rel'">
+                  <xsl:choose>
+                    <xsl:when test="@x and @y">
+                      <xsl:value-of select="&quot;m&quot;"/>
+                      <xsl:value-of select="@x"/>
+                      <xsl:value-of select="&quot;,&quot;"/>
+                      <xsl:value-of select="@y"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="&quot;m&quot;"/>
+                      <xsl:value-of select="@d"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <!-- default to absolute positioning-->
+                <xsl:otherwise>
+                  <xsl:choose>
+                    <xsl:when test="@x and @y">
+                      <xsl:value-of select="&quot;M&quot;"/>
+                      <xsl:value-of select="@x"/>
+                      <xsl:value-of select="&quot;,&quot;"/>
+                      <xsl:value-of select="@y"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="&quot;M&quot;"/>
+                      <xsl:value-of select="@d"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:when test="name() = 'closepath'">
               <xsl:value-of select="'z'"/>
