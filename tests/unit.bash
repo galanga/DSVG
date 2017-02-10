@@ -382,3 +382,35 @@ EOF
    assert_xpath "svg/polyline" '<polyline points="1,2 3,4 "/>'
 }
 
+
+@test "polygon points x and y" {
+IN=$(cat <<'EOF'
+<svg>
+  <polygon>
+  <point x="50" y="150" />
+  <point x="50" y="200" />
+  <point x="200" y="200" />
+  <point x="200" y="100" />
+  </polygon>
+</svg>
+EOF
+)
+   invoke_xslt "$IN"
+   assert_xpath "svg/polygon" '<polygon points="50,150 50,200 200,200 200,100 "/>'
+}
+
+@test "polygon points d" {
+IN=$(cat <<'EOF'
+<svg>
+  <polygon>
+  <point d="1,2" />
+  <point d="3,4" />
+  <point d="5,6" />
+  </polygon>
+</svg>
+EOF
+)
+   invoke_xslt "$IN"
+   assert_xpath "svg/polygon" '<polygon points="1,2 3,4 5,6 "/>'
+}
+

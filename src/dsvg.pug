@@ -3,6 +3,25 @@ xsl:stylesheet(xmlns:xsl='http://www.w3.org/1999/XSL/Transform', version='1.0')
     xsl:copy
       xsl:apply-templates(select='@*|node()')/
 
+  xsl:template(match='polygon')
+    polygon
+      xsl:copy-of(select='@*')/
+      xsl:attribute(name='points')
+        xsl:value-of(select='@points')/
+
+        xsl:for-each(select='./*')
+          xsl:choose
+            xsl:when(test="name() = 'point'")
+              xsl:choose
+                xsl:when(test="@x and @y")
+                  xsl:value-of(select='@x')/
+                  xsl:value-of(select='","')/
+                  xsl:value-of(select='@y')/
+                  xsl:value-of(select='" "')/
+                xsl:otherwise
+                  xsl:value-of(select='@d')/
+                  xsl:value-of(select='" "')/
+
   xsl:template(match='polyline')
     polyline
       xsl:copy-of(select='@*')/

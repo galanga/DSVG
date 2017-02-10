@@ -5,6 +5,32 @@
       <xsl:apply-templates select="@*|node()"/>
     </xsl:copy>
   </xsl:template>
+  <xsl:template match="polygon">
+    <polygon>
+      <xsl:copy-of select="@*"/>
+      <xsl:attribute name="points">
+        <xsl:value-of select="@points"/>
+        <xsl:for-each select="./*">
+          <xsl:choose>
+            <xsl:when test="name() = 'point'">
+              <xsl:choose>
+                <xsl:when test="@x and @y">
+                  <xsl:value-of select="@x"/>
+                  <xsl:value-of select="&quot;,&quot;"/>
+                  <xsl:value-of select="@y"/>
+                  <xsl:value-of select="&quot; &quot;"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="@d"/>
+                  <xsl:value-of select="&quot; &quot;"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:attribute>
+    </polygon>
+  </xsl:template>
   <xsl:template match="polyline">
     <polyline>
       <xsl:copy-of select="@*"/>
