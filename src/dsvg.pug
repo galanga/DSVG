@@ -3,6 +3,25 @@ xsl:stylesheet(xmlns:xsl='http://www.w3.org/1999/XSL/Transform', version='1.0')
     xsl:copy
       xsl:apply-templates(select='@*|node()')/
 
+  xsl:template(match='polyline')
+    polyline
+      xsl:copy-of(select='@*')/
+      xsl:attribute(name='points')
+        xsl:value-of(select='@points')/
+
+        xsl:for-each(select='./*')
+          xsl:choose
+            xsl:when(test="name() = 'point'")
+              xsl:choose
+                xsl:when(test="@x and @y")
+                  xsl:value-of(select='@x')/
+                  xsl:value-of(select='","')/
+                  xsl:value-of(select='@y')/
+                  xsl:value-of(select='" "')/
+                xsl:otherwise
+                  xsl:value-of(select='@d')/
+                  xsl:value-of(select='" "')/
+
   xsl:template(match='path')
     path
       xsl:copy-of(select='@*')/
@@ -60,7 +79,6 @@ xsl:stylesheet(xmlns:xsl='http://www.w3.org/1999/XSL/Transform', version='1.0')
                     xsl:otherwise
                       xsl:value-of(select='"m"')/
                       xsl:value-of(select='@d')/
-
                 // default to absolute positioning
                 xsl:otherwise
                   xsl:choose
@@ -71,6 +89,142 @@ xsl:stylesheet(xmlns:xsl='http://www.w3.org/1999/XSL/Transform', version='1.0')
                       xsl:value-of(select='@y')/
                     xsl:otherwise
                       xsl:value-of(select='"M"')/
+                      xsl:value-of(select='@d')/
+
+            xsl:when(test="name() = 'curveto'")
+              xsl:choose
+                xsl:when(test="@type='relative' or @type='rel'")
+                  xsl:choose
+                    xsl:when(test="@x1 and @y1 and @x2 and @y2 and @x and @y")
+                      xsl:value-of(select='"c"')/
+                      xsl:value-of(select='@x1')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y1')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x2')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y2')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:when(test="@x2 and @y2 and @x and @y")
+                      xsl:value-of(select='"c"')/
+                      xsl:value-of(select='@x2')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y2')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:otherwise
+                      xsl:value-of(select='"c"')/
+                      xsl:value-of(select='@d')/
+                // default to absolute positioning
+                xsl:otherwise
+                  xsl:choose
+                    xsl:when(test="@x1 and @y1 and @x2 and @y2 and @x and @y")
+                      xsl:value-of(select='"C"')/
+                      xsl:value-of(select='@x1')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y1')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x2')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y2')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:when(test="@x2 and @y2 and @x and @y")
+                      xsl:value-of(select='"C"')/
+                      xsl:value-of(select='@x2')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y2')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:otherwise
+                      xsl:value-of(select='"C"')/
+                      xsl:value-of(select='@d')/
+
+            xsl:when(test="name() = 'quadto'")
+              xsl:choose
+                xsl:when(test="@type='relative' or @type='rel'")
+                  xsl:choose
+                    xsl:when(test="@x1 and @y1 and @x and @y")
+                      xsl:value-of(select='"q"')/
+                      xsl:value-of(select='@x1')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y1')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:when(test="@x and @y")
+                      xsl:value-of(select='"q"')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:otherwise
+                      xsl:value-of(select='"q"')/
+                      xsl:value-of(select='@d')/
+                // default to absolute positioning
+                xsl:otherwise
+                  xsl:choose
+                    xsl:when(test="@x1 and @y1 and @x and @y")
+                      xsl:value-of(select='"Q"')/
+                      xsl:value-of(select='@x1')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y1')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:when(test="@x and @y")
+                      xsl:value-of(select='"Q"')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:otherwise
+                      xsl:value-of(select='"Q"')/
+                      xsl:value-of(select='@d')/
+
+            xsl:when(test="name() = 'arcto'")
+              xsl:choose
+                xsl:when(test="@type='relative' or @type='rel'")
+                  xsl:choose
+                    xsl:when(test="@x1 and @y1 and @x and @y")
+                    xsl:otherwise
+                      xsl:value-of(select='"a"')/
+                      xsl:value-of(select='@d')/
+                xsl:otherwise
+                  xsl:value-of(select='"A"')/
+                  xsl:choose
+                    xsl:when(test="@rx and @ry and @rotation and @x and @y")
+                      xsl:value-of(select='@rx')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@ry')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@rotation')/
+                      xsl:value-of(select='" "')/
+                      xsl:choose
+                        xsl:when(test="@large-arc")
+                          xsl:value-of(select='@large-arc')/
+                        xsl:otherwise
+                          xsl:value-of(select='"0"')/
+                      xsl:value-of(select='","')/
+                      xsl:choose
+                        xsl:when(test="@sweep")
+                          xsl:value-of(select='@sweep')/
+                        xsl:otherwise
+                          xsl:value-of(select='"0"')/
+                      xsl:value-of(select='" "')/
+                      xsl:value-of(select='@x')/
+                      xsl:value-of(select='","')/
+                      xsl:value-of(select='@y')/
+                    xsl:otherwise
                       xsl:value-of(select='@d')/
 
             xsl:when(test="name() = 'pathseg'")
